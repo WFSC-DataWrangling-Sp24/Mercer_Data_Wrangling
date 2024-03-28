@@ -40,7 +40,12 @@ The braces indicate that the lines of code are a group that gets run together.
 Let's write out our first function. We want to calculate shrub volumes.
 
 ```{r}
-
+# write a function to calculate a volume
+calc_volume <- function(length, width, height) {
+  area <- length * width
+  volume <- area * height
+  return(volume)
+}
 ```
 
 It is important to note that writing the function does not create the function. We have to remember to run the code to create the function and add it to our environment.
@@ -50,13 +55,14 @@ When we run this code chunk above, we can see that the function gets added to ou
 Let's use our new function.
 
 ```{r}
-
+# length 2, width 4, height 3.5
+calc_volume(2, 4, 3.5)
 ```
 
 As with other functions, we can store the output as an object to use later.
 
 ```{r}
-
+volume1 <- calc_volume(2, 4, 3.5)
 ```
 
 #### Let's Practice!
@@ -88,7 +94,11 @@ As with many of the functions that we have already used in this class, we can se
 For example, if many of our shrubs are the same height, we could specify that the default height should be 1.
 
 ```{r}
-
+calc_volume <- function(length, width, height = 2) {
+  area <- length * width
+  volume <- area * height
+  return(volume)
+}
 ```
 
 ### Combining Functions
@@ -96,7 +106,11 @@ For example, if many of our shrubs are the same height, we could specify that th
 Again, as with other functions, we can combine functions of our own creation together.
 
 ```{r}
-
+calc_mass_from_volume <- function(volume) {
+  mass <- 2.65 * volume^0.9
+  return(mass)
+}
+calc_mass_from_volume(4)
 ```
 
 We can also use pipes with our own functions. The output from the first function becomes the first argument for the second function.
