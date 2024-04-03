@@ -111,12 +111,19 @@ calc_mass_from_volume <- function(volume) {
   return(mass)
 }
 calc_mass_from_volume(4)
+
+shrub_vol <- calc_volume(0.8, 1.6)
+calc_mass_from_volume(shrub_vol)
+
 ```
 
 We can also use pipes with our own functions. The output from the first function becomes the first argument for the second function.
 
 ```{r}
-
+library(tidyverse)
+shrub_mass <- calc_volume(0.8, 1.6) %>% 
+  calc_mass_from_volume()
+shrub_mass
 ```
 
 ### Using the `tidyverse` in Functions
@@ -132,13 +139,19 @@ If we try to use `tidyverse` functions the way we normally would within our func
 First, let's load our packages and get some data from Palmer Penguins.
 
 ```{r}
-
+library(palmerpenguins)
 ```
 
 Now, let's write some code for a ggplot within a function as we normally would.
 
 ```{r eval = FALSE}
+make_hist <- function(df, column, label_x) {
+  ggplot(df, aes(x = column)) +
+    geom_histogram() +
+    labs(x = label_x)
+}
 
+make_hist(penguins, body_mass_g, "Body Mass (g)")
 ```
 
 To fix this issue, we have to tell our code which inputs/arguments are this special type of data variable.
@@ -146,7 +159,12 @@ To fix this issue, we have to tell our code which inputs/arguments are this spec
 We can do this by "embracing" them in double braces. This tells the function to treat them in the "tidy evaluation" method.
 
 ```{r}
-
+make_hist <- function(df, column, label_x) {
+  ggplot(df, aes(x = {{column}})) +
+    geom_histogram() +
+    labs(x = label_x)
+}
+make_hist(penguins, body_mass_g, "Body Mass (g)")
 ```
 
 ### Code Design with Functions
