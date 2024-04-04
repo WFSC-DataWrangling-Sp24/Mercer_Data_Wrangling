@@ -267,19 +267,57 @@ get_mass_from_length_by_name(13, "Ankylosauria")
 For this question, we will be using functions from `dplyr` and data from the `lterdatasampler` package, so make sure you load both of those packages with the `library()` function.
 
 First, create an object called `crab_size` and assign the value 17 to it.
+```{r}
+library(dplyr)
+library(lterdatasampler)
+
+crab_size <- 17
+```
+
 
 a.  Write an `if` statement using the `if_else` function from `dplyr` that says that a crab that is larger than or equal to 20 is "large" and a crab that is smaller than 20 is "small."
+```{r}
+# 5a
+if_else(crab_size >= 20, "large", "small")
+```
+
 
 b.  Make sure that your `crab_size` object is set to 17 (if you overwrote it in (a)).
 
     This time, write a set of nested `if_else` functions that say that if a crab is greater than or equal to 20, it is "large;" if greater than or equal to 10 but less than 20, it is "medium;" and if it is smaller than 10, it is "small."
+    
+```{r}
+# 5b
+if_else(crab_size >= 20, "large",
+        if_else(crab_size >= 10 & crab_size < 20, "medium", "small"))
+```
+
 
 c.  Use the `case_when` function to perform the same task as (b). Again, set the `crab_size` object to 17, as needed.
+```{r}
+# 5c
+case_when(crab_size >= 20 ~ "large",
+          crab_size >= 10 & crab_size < 20 ~ "medium",
+          TRUE ~ "small")
+```
+
 
 d.  Take a look at the `pie_crab` dataset from the `lterdatasampler` package by running `head(pie_crab)`. We want to create a new column based on the `size` column. Using the `if_else` function inside of a `mutate` function, create a new column called `size_category` based on the same conditions as (a).
+```{r}
+# 5d
+head(pie_crab)
+pie_crab %>% mutate(size_category = if_else(crab_size >= 20, "large", "small"))
+```
+
 
     I've placed my new column next to the size column for the sake of the answer key; you don't need to do this.
 
 e.  Now use the `case_when` function inside a `mutate` function to create a new column called `size_category3` in the `pie_crab` dataframe that meets the same conditions as (b) and (c).
+```{r}
+# 5e
+pie_crab %>% mutate(size_category3 = if_else(size >= 20, "large",
+        if_else(size >= 10 & size < 20, "medium", "small")))
+```
+
 
     I've placed my new column next to the size column for the sake of the answer key; you don't need to do this.

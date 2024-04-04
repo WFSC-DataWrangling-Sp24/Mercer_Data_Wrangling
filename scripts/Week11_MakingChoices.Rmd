@@ -194,7 +194,7 @@ All of the statements we have been working with have been outside of the `tidyve
 The `tidyverse` (`dplyr` in particular) has functions that we can use to accomplish the same tasks.
 
 ```{r}
-
+library(tidyverse)
 ```
 
 When the choice is binary (choose one of two outcomes), we can use the `if_else` function.
@@ -206,13 +206,16 @@ The arguments for an `if_else` function are:
 -   the outcome if the statement is `FALSE`
 
 ```{r}
-
+x <- 3
+if_else(x>5, x*4, x*10)
 ```
 
 We can also nest the `if_else` functions.
 
 ```{r}
-
+veg_type <- "shrub"
+if_else(veg_type =="grass", "small", 
+        if_else(veg_type == "shrub", "medium", "large"))
 ```
 
 When we have situations where we would need to nest `if_else` statements, these nested statements can get pretty hard to interpret.
@@ -222,7 +225,10 @@ In order to avoid these nested `if_else` statements, we can use the `case_when` 
 The `case_when` function uses the `~` to set expressions.
 
 ```{r}
-
+veg_type <- "grass"
+case_when(veg_type == "grass" ~ "small", 
+          veg_type == "shrub" ~ "medium",
+          veg_type == "tree" ~ "large")
 ```
 
 In a circumstance where you want something similar to the `else` statement (meaning, if none of these conditions are met, do something else), we have to do something rather unique in the `case_when` function.
@@ -230,7 +236,11 @@ In a circumstance where you want something similar to the `else` statement (mean
 Essentially, we have to force a `TRUE` outcome, which we do by literally using `TRUE` as the final option.
 
 ```{r}
-
+veg_type <- "forb"
+case_when(veg_type == "grass" ~ "small", 
+          veg_type == "shrub" | veg_type == "forb" ~ "medium",
+          veg_type == "tree" ~ "large",
+          TRUE ~ "no size")
 ```
 
 ### Using `if_else` and `case_when` with `mutate`
@@ -240,13 +250,14 @@ One of the nicest aspects of the `if_else` and `case_when` functions is that we 
 Let's look at an example using a dataframe from a package called `lterdatasampler`. This package has a number of cleaned datasets from Long Term Ecological Research (LTER) sites around the US.
 
 ```{r}
-
+# install.packages("lterdatasampler")
+library(lterdatasampler)
 ```
 
 We are going to use the `and_vertebrates` dataset, which contains data about trout and salamanders from Andrews Forest LTER.
 
 ```{r}
-
+and_vertebrates <- and_vertebrates
 ```
 
 The `section` column denotes whether the data were collected in clear cut forest ("CC") or old growth forest ("OG").
@@ -254,7 +265,8 @@ The `section` column denotes whether the data were collected in clear cut forest
 Let's make a new column in the data frame that has "Clear Cut" when the value is "CC", "Old Growth" when the value is "OG", and `NA` if there is something else.
 
 ```{r}
-
+and_vertebrates %>% 
+  mutate(Forest_Type = if_else(section == "CC", "Clear Cut", "Old Growth"))
 ```
 
 ## Why `if`-`else if`?
